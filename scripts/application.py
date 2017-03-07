@@ -2,24 +2,28 @@
 import unittest
 import rospy
 import rostest
+import roslib
+import roslaunch
 import tf
 import math
 import sys
-
+import rospkg
+from rosgraph_msgs.msg import Log
 from atf_core import ATF
 from simple_script_server import *
 
 from atf_core import ATF
 
 class Application:
-    #rospy.Subscriber("/rosout_agg", Log, self.state_transition_cb, queue_size=None)
     def __init__(self):
         # initialize the ATF class
         self.atf = ATF() 
+        #rospy.Subscriber("/rosout_agg", Log, self.state_transition_cb, queue_size=None)
 
     def state_transition_cb(self, msg):
         # TODO sm feedback on state change [eg: ERROR, READY, BUSY ...] 
-        if 'subscribed to person_of_interest_filter' in msg.msg:
+        rospy.loginfo("callback")
+        if 'Done.' in msg.msg:
             self.ready_for_scenario = True
 
     def execute(self):
@@ -31,9 +35,33 @@ class Application:
         #self.wait_for_robot_ready();
         #self.atf.stop("testblock_1")
         #self.atf.start("testblock_2")
-
+        name = rospy.get_param('atf/robot_config/additional_arguments/file_name')
+        ndt_mapping = str(rospy.get_param('atf/robot_config/additional_arguments/ndt_mapping'))
+        resolution = str(rospy.get_param('atf/robot_config/additional_arguments/int_res'))
+        ndt_str=''
+        if ndt_mapping == 1:
+            ndt_str = 'ndt'
+        else:
+            ndt_str = 'no_ndt'
+        observation_model = str(rospy.get_param('atf/robot_config/additional_arguments/observation_model'))
+        # #place = str(name).find('file_name') + str(name).find()
+        # #end = 
+        map_eval_path='asd'
+        rospack = rospkg.RosPack()
+        rospack.list()
+        map_eval_path = rospack.get_path('ipa_map_comparison')
+        map_eval_path = map_eval_path +'/maps/' + '/' + str(observation_model) + '_' + str(ndt_str)
+        rospy.logerr(str(map_eval_path))
+        #rospy.logerr(str(name['atf']['robot_config']['additional_arguments']['file_name']))
+        rospy.sleep(550)
         # Do something else
-        rospy.sleep(200)
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/srd-ps/git/ipa_navigation_catkin/src/evaluation_tools/ipa_map_comparison/launch/map_saver.launch"])
+
+        launch.start()
+        rospy.sleep(5)
+        launch.shutdown()
         self.atf.stop("testblock_small")
         #self.atf.stop("testblock_all")
 

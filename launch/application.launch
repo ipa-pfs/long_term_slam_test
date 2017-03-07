@@ -3,24 +3,24 @@
     <!-- Add all launch files that you want to run additionally to your robot bringup like moveit, etc... -->
     
     <arg name="int_res" default="0.5"/>
-    <arg name="part_num" default="20"/>
-    <arg name="ndt_match" default="false"/>
     <arg name="file_name" default="test.txt"/>
+    <arg name="standard_deviation_range" default="0.02"/>
+    <arg name="static_map" default="true"/>
+    <arg name="ndt_mapping" default="false"/>
+    <arg name="observation_model" default="standard"/>
     
-   <node name="bagfile" pkg="rosbag" type="play" args="--clock /home/srd-ps/bags/drive_trhough_apartment_filtered.bag" output="screen"/>  
+   <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
    <node pkg="rviz" type="rviz" name="$(anon rviz)"/>
     
    
     <include file="$(find ipa_long_term_slam)/launch/long_term_slam.launch">
         <arg name="init_from_backup" value="false"/>
-        <arg name="init_from_static_map" value="false"/>
-        <!--arg name="robot_env" value="ipa-apartment" /-->
+        <arg name="init_from_static_map" value="$(arg static_map)"/>
+        <!--arg name="robot_env" value="ipa-production-plant" /-->
         <arg name="resolution" value="$(arg int_res)" />
-        <!--arg name="particles" value="$(arg part_num)" />
-        <arg name="ndt_matching" value="$(arg ndt_match)" /-->
+        <arg name="standard_deviation_range" value="$(arg standard_deviation_range)" />
+        <arg name="ndt_mapping" value="$(arg ndt_mapping)" />
+        <arg name="observation_model" default="$(arg observation_model)"/>
+     
     </include> 
-    <include file="$(find hmm_measurements)/launch/measure.launch">
-        <arg name="name" value="$(arg file_name)"/>
-    </include>
-    <include file="$(find hmm_measurements)/src/measure_cpu.py" args="-p long_term_slam -f cpu_mean_1"/>
 </launch>

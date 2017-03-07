@@ -5,5 +5,9 @@ additional_parameters:
   "/use_sim_time": true                           # Name and value of additional parameter which will be included in every recording test file
 additional_arguments:                              # Name and value of additional arguments which will be included in every recording test file
   "int_res": 0.5
-  "part_num": 20
   "file_name": test.txt
+  "standard_deviation_range": 0.02
+  "static_map": true
+  "ndt_mapping": true
+  "observation_model": gaussianRange
+

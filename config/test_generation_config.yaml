@@ -13,7 +13,7 @@ yaml_output: "/home/srd-ps/long_term_slam_test/results_yaml/"                   
 
 speed_factor_analysis: 1.0                                          # Factor to speedup analysis (can lower accuracy if too fast, especially path_length)
 
-time_limit_recording: 700.0                                          # Time limit in seconds for recording
+time_limit_recording: 1500.0                                          # Time limit in seconds for recording
 time_limit_analysing: 1000.0                                          # Time limit in seconds for analysing
 time_limit_uploading: 1000.0                                          # Time limit in seconds for uploading
 
