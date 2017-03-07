@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="/atf/test_name" value="ts0_c0_r0_e0_0"/>
+    <param name="/atf/test_config_name" value="test1"/>
+    <param name="/atf/robot_config_name" value="part_test"/>
+    <param name="/atf/robot_env_config_name" value="env1"/>
+    <rosparam command="load" file="$(find long_term_slam_test)/config/test_configs/test1.yaml" param="/atf/test_config"/>
+    <rosparam command="load" file="$(find long_term_slam_test)/config/robots/part_test.yaml" param="/atf/robot_config"/>
+    <rosparam command="load" file="$(find long_term_slam_test)/config/robot_envs/env1.yaml" param="/atf/robot_env_config"/>
+    <param name="/atf/bagfile_output" value="/home/srd-ps/long_term_slam_test/data/"/>
+    <param name="/atf/json_output" value="/home/srd-ps/long_term_slam_test/results_json/"/>
+    <param name="/atf/yaml_output" value="/home/srd-ps/long_term_slam_test/results_yaml/"/>
+    <include file="$(find long_term_slam_test)/launch/application.launch">
+        <arg name="file_name" value="test.txt"/>
+        <arg name="part_num" value="20"/>
+        <arg name="int_res" value="0.5"/>
+        <param name="/use_sim_time" value="True"/>
+    </include>
+    <test pkg="long_term_slam_test" required="true" test-name="recording_ts0_c0_r0_e0_0" time-limit="700.0" type="application.py"/>
+</launch>

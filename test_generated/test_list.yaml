@@ -1,0 +1,6 @@
+- ts0_c0_r0_e0:
+    robot: part_test
+    robot_env: env1
+    subtests:
+    - ts0_c0_r0_e0_0
+    test_config: test1

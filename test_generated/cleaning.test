@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="/atf/bag_output" value="/home/srd-ps/long_term_slam_test/data/"/>
+    <param name="/atf/json_output" value="/home/srd-ps/long_term_slam_test/results_json/"/>
+    <param name="/atf/yaml_output" value="/home/srd-ps/long_term_slam_test/results_yaml/"/>
+    <test pkg="atf_core" test-name="cleaning" time-limit="10" type="cleaner.py"/>
+</launch>

@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="/atf/test_name" value="ts0_c0_r0_e0_0"/>
+    <param name="/atf/test_config_name" value="test1"/>
+    <rosparam command="load" file="$(find long_term_slam_test)/config/test_configs/test1.yaml" param="/atf/test_config"/>
+    <param name="/atf/test_generated_path" value="$(find long_term_slam_test)/test_generated"/>
+    <param name="/atf/json_output" value="/home/srd-ps/long_term_slam_test/results_json/"/>
+    <param name="/atf/yaml_output" value="/home/srd-ps/long_term_slam_test/results_yaml/"/>
+    <node args="--delay=5.0 --clock --rate=1.0 /home/srd-ps/long_term_slam_test/data/ts0_c0_r0_e0_0.bag" name="player" output="log" pkg="rosbag" required="true" type="play"/>
+    <test pkg="atf_core" required="true" test-name="analysing_ts0_c0_r0_e0_0" time-limit="1000.0" type="analyser.py"/>
+</launch>

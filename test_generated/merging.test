@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="/atf/test_name" value="ts0_c0_r0_e0"/>
+    <param name="/atf/test_config_name" value="test1"/>
+    <rosparam command="load" file="$(find long_term_slam_test)/config/test_configs/test1.yaml" param="/atf/test_config"/>
+    <param name="/atf/yaml_output" value="/home/srd-ps/long_term_slam_test/results_yaml/"/>
+    <param name="/atf/json_output" value="/home/srd-ps/long_term_slam_test/results_json/"/>
+    <test pkg="atf_core" test-name="merging" time-limit="10" type="merger.py"/>
+</launch>
