@@ -10,4 +10,6 @@ additional_arguments:                              # Name and value of additiona
   "static_map": true
   "ndt_mapping": true
   "observation_model": gaussianRange
-
+  "number_of_neighbours: 4"
+  "neighbourhood_score: 0.5"
+  

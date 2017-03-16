@@ -11,6 +11,7 @@ import rospkg
 from rosgraph_msgs.msg import Log
 from atf_core import ATF
 from simple_script_server import *
+from ipa_map_comparison.srv import *
 
 from atf_core import ATF
 
@@ -44,14 +45,18 @@ class Application:
         else:
             ndt_str = 'no_ndt'
         observation_model = str(rospy.get_param('atf/robot_config/additional_arguments/observation_model'))
+        number_of_neighbours =(rospy.get_param('atf/robot_config/additional_arguments/number_of_neighbours'))
+        neighbourhood_score = (rospy.get_param('atf/robot_config/additional_arguments/number_of_neighbours'))
+        eval_file_name = "eval_" + str(observation_model) + "_" + str(resolution) + "_" + ndt_str + "_" + str(number_of_neighbours) +"_"+str(neighbourhood_score) +".txt"
+        map_file_name = "map_" + str(observation_model) + "_" + str(resolution) + "_" + ndt_str + "_" + str(number_of_neighbours) +"_"+str(neighbourhood_score)
         # #place = str(name).find('file_name') + str(name).find()
         # #end = 
-        map_eval_path='asd'
+        map_path='asd'
         rospack = rospkg.RosPack()
         rospack.list()
-        map_eval_path = rospack.get_path('ipa_map_comparison')
-        map_eval_path = map_eval_path +'/maps/' + '/' + str(observation_model) + '_' + str(ndt_str)
-        rospy.logerr(str(map_eval_path))
+        map_path = rospack.get_path('ipa_map_comparison')
+        map_path = map_path +'/maps/'
+        rospy.logerr(str(map_path))
         #rospy.logerr(str(name['atf']['robot_config']['additional_arguments']['file_name']))
         rospy.sleep(550)
         # Do something else
@@ -62,6 +67,20 @@ class Application:
         launch.start()
         rospy.sleep(5)
         launch.shutdown()
+
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/srd-ps/git/ipa_navigation_catkin/src/evaluation_tools/ipa_map_comparison/launch/map_comparision_node.launch"])
+        launch.start()
+        rospy.sleep(5)
+        launch.shutdown()
+        start_map_eval = rospy.ServiceProxy('/startMapEval', StartMapEval)
+        start_map_eval(eval_file_name, number_of_neighbours, neighbourhood_score)
+        new_map_path = map_path "map"+"_"+ str(observation_model) + "_" + ndt_str +"/" +map_file_name
+        map_path = map_path + "map"
+        shutil.move(map_path + ".pgm", new_map_path +".pgm")
+        shutil.move(map_path + ".yaml", new_map_path +".yaml")
+
         self.atf.stop("testblock_small")
         #self.atf.stop("testblock_all")
 
