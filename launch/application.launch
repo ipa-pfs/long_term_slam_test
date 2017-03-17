@@ -3,11 +3,13 @@
     <!-- Add all launch files that you want to run additionally to your robot bringup like moveit, etc... -->
     
     <arg name="int_res" default="0.5"/>
-    <arg name="file_name" default="test.txt"/>
     <arg name="standard_deviation_range" default="0.02"/>
     <arg name="static_map" default="true"/>
     <arg name="ndt_mapping" default="false"/>
     <arg name="observation_model" default="standard"/>
+    <arg name="number_of_neighbours" default="4"/>
+    <arg name="neighbourhood_score" default="0.5"/>
+    <arg name="eval_file_name" default="test.txt"/>
     
    <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
    <node pkg="rviz" type="rviz" name="$(anon rviz)"/>
