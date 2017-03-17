@@ -6,14 +6,12 @@
     <arg name="standard_deviation_range" default="0.02"/>
     <arg name="static_map" default="true"/>
     <arg name="ndt_mapping" default="false"/>
+    <arg name="ndt_matching" default="false"/>
     <arg name="observation_model" default="standard"/>
-    <arg name="number_of_neighbours" default="4"/>
-    <arg name="neighbourhood_score" default="0.5"/>
-    <arg name="eval_file_name" default="test.txt"/>
+    <arg name="eval_file_name" default="test"/>
     
    <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
    <node pkg="rviz" type="rviz" name="$(anon rviz)"/>
-    
    
     <include file="$(find ipa_long_term_slam)/launch/long_term_slam.launch">
         <arg name="init_from_backup" value="false"/>
@@ -25,4 +23,8 @@
         <arg name="observation_model" default="$(arg observation_model)"/>
      
     </include> 
+    <include file="$(find hmm_measurement)/launch/measure.launch">
+    	<arg name="$(arg eval_file_name).txt"/>
+    	<arg name="$(arg eval_file_name)_mean.txt"/>
+    </include>
 </launch>
