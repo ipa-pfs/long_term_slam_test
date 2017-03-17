@@ -20,7 +20,7 @@ class robot_maker():
 
 
     def make_robots(self):
-        for n in range(0, 2):
+        for n in range(0, 3):
             for obs in self.observation_model:
                 for ndt in self.ndt_mapping:
                     for res in self.int_res:

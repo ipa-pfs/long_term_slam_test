@@ -10,8 +10,8 @@
     <arg name="observation_model" default="standard"/>
     <arg name="eval_file_name" default="test"/>
     
-   <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
-   <node pkg="rviz" type="rviz" name="$(anon rviz)"/>
+   <node name="bagfile" pkg="rosbag" type="play" args="--clock /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
+   <!--node pkg="rviz" type="rviz" name="$(anon rviz)"/-->
    
     <include file="$(find ipa_long_term_slam)/launch/long_term_slam.launch">
         <arg name="init_from_backup" value="false"/>
@@ -20,11 +20,14 @@
         <arg name="resolution" value="$(arg int_res)" />
         <arg name="standard_deviation_range" value="$(arg standard_deviation_range)" />
         <arg name="ndt_mapping" value="$(arg ndt_mapping)" />
-        <arg name="observation_model" default="$(arg observation_model)"/>
+        <arg name="ndt_matching" value="$(arg ndt_mapping)" />
+        <arg name="observation_model" value="$(arg observation_model)"/>
      
     </include> 
-    <include file="$(find hmm_measurement)/launch/measure.launch">
-    	<arg name="$(arg eval_file_name).txt"/>
-    	<arg name="$(arg eval_file_name)_mean.txt"/>
+    <include file="$(find hmm_measurements)/launch/measure.launch">
+    	<arg name="name" value="$(arg eval_file_name).txt"/>
+    	<arg name="mean_name" value="$(arg eval_file_name)_mean.txt"/>
     </include>
+    <node pkg="hmm_measurements" name="cpu_measure_node" type="measure_cpu.py" args="-p long_term_slam -f $(arg eval_file_name)_cpu "/>
+
 </launch>
