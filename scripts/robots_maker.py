@@ -15,23 +15,32 @@ class robot_maker():
         self.neighbourhood_score = [0.5, 1]
         self.number_of_neighbours = [4, 8]
         self.observation_model = ["gaussianRange","standard"]
-        self.standard_deviation_range = [0.02]
+        self.standard_deviation_range = [0.02, 0.005, 0.1]
         self.file_path = '/home/srd-ps/git/atf_ws/src/long_term_slam_test/config/robots/'
+        self.bag_files =["/home/srd-ps/bags/002noise_filtered.bag", "/home/srd-ps/bags/0005noise_filtered.bag", "/home/srd-ps/bags/01noise_filtered.bag"]
         self.robots = ""
 
 
     def make_robots(self):
         for obs in self.observation_model:
             for ndt in self.ndt_mapping:
+                if (obs == "gaussianRange" and ndt == False):
+                    continue;
                 for neighbourhood in self.neighbourhood_score:
                     for res in self.int_res:
                         for neighbours in self.number_of_neighbours:
                             for dev in self.standard_deviation_range:
+                                if (dev == 0.02):
+                                    bag = self.bag_files[0]
+                                elif (dev == 0.005):
+                                    bag = self.bag_files[1]
+                                elif (dev ==0.1):
+                                    bag = self.bag_files[2]
                                 if (ndt ==True):
                                     ndt_str ="ndt"
                                 else:
                                     ndt_str="no_ndt"
-                                filename = str(obs)+"_"+str(res)+"m_"+ndt_str+"_"+str(neighbours)+"_"+str(neighbourhood)
+                                filename = str(obs)+"_"+str(res)+"m_"+ndt_str+"_"+str(neighbours)+"_"+str(neighbourhood)+"_"+str(dev)
                                 # save everything in the file
                                 #with open(self.file_path+filename, 'w') as stream:
                                 print "Path: "+self.file_path+filename
@@ -39,7 +48,7 @@ class robot_maker():
                                 robot.write("robot_bringup_launch: \"launch/all.launch\"\nwait_for_topics: []\nwait_for_services: []\n"
                                              "additional_parameters:\n  \"/use_sim_time\": true\n"
                                              "additional_arguments:\n  \"int_res\": "+str(res)+"\n  \"standard_deviation_range\": "+str(dev)+
-                                             "\n  \"static_map\": true\n  \"ndt_mapping\": " +str(ndt) + "\n  \"observation_model\": "+str(obs) +"\n  \"number_of_neighbours\": "+str(neighbours) + "\n  \"neighbourhood_score\": "+str(neighbourhood)+ "\n")
+                                             "\n  \"static_map\": true\n  \"ndt_mapping\": " +str(ndt) + "\n  \"observation_model\": "+str(obs) +"\n  \"number_of_neighbours\": "+str(neighbours) + "\n  \"neighbourhood_score\": "+str(neighbourhood)+ "\n  \"bag_file\": "+str(bag)+ "\n")
                                     # stream.write(yaml.dump({'path_length': {'topics': [{'"/tf"', '"/scan_unified"'}]
                                     #                         'robot_bringup_launch': '"launch/all.launch"'
                                     #                         'wait_for_topics': '[]'

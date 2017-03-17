@@ -10,8 +10,9 @@
     <arg name="number_of_neighbours" default="4"/>
     <arg name="neighbourhood_score" default="0.5"/>
     <arg name="eval_file_name" default="test.txt"/>
+    <arg name="bag_file" default="/home/srd-ps/bags/002noise_filtered.bag"/>
     
-   <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 /home/srd-ps/bags/002noise_filtered.bag" output="screen"/>  
+   <node name="bagfile" pkg="rosbag" type="play" args="--clock -r 5 $(arg bag_file)" output="screen"/>  
    <node pkg="rviz" type="rviz" name="$(anon rviz)"/>
     
    
